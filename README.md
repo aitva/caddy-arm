@@ -1,2 +1,2 @@
-# caddy-docker-arm
-A Docker container with Caddy for RPI.
+# caddy-arm
+A Docker container with a secure Caddy install for ARM.
