@@ -1,7 +1,7 @@
 FROM armhf/alpine
 
-ENV CADDY_VERSION 0.9.5
-ENV CADDY_SRC_URL https://github.com/mholt/caddy/releases/download/v$CADDY_VERSION/caddy_linux_arm7.tar.gz
+ENV CADDY_PLUGINS git,hugo,ipfilter
+ENV CADDY_SRC_URL https://caddyserver.com/download/build?os=linux&arch=arm&features=$CADDY_PLUGINS
 ENV CADDYPATH /etc/caddy/.ssl
 
 RUN apk add --no-cache ca-certificates
@@ -11,7 +11,7 @@ RUN set -ex \
         && wget -q $CADDY_SRC_URL -O caddy.tar.gz \
         && tar -C /usr/local/bin -xzf caddy.tar.gz \
         && rm caddy.tar.gz \
-        && setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy_linux_arm7
+        && setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
 
 RUN set -ex \
         && addgroup -g 82 -S www-data \
@@ -33,4 +33,4 @@ EXPOSE 80 443 2015
 COPY index.html /var/www
 COPY Caddyfile /etc/caddy
 
-ENTRYPOINT caddy_linux_arm7 -agree=true -conf=/etc/caddy/Caddyfile
+ENTRYPOINT caddy -agree=true -conf=/etc/caddy/Caddyfile
